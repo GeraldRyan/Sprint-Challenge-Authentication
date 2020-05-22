@@ -23,13 +23,5 @@ module.exports = (req, res, next) => {
   else{
     res.status(400).json({message:"Please provide authentication information"})
   }
-  
-  // if(true){
-  //   //code
-  // res.status(401).json({ you: 'shall not pass!' });
-  // }
-  // else{
-  //   next()
-  // }
-  
+
 };

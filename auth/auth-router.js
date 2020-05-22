@@ -27,7 +27,6 @@ router.post('/register', (req, res) =>
 {
   // implement registration
   const credentials = req.body
-  console.log(credentials)
 
   if (isValid(credentials))
   {
@@ -36,7 +35,6 @@ router.post('/register', (req, res) =>
     // turn password into hashbrowns
     const hash = bcryptjs.hashSync(credentials.password, rounds)
     credentials.password = hash
-    console.log(credentials)
     //save user to db
     add(credentials).then(user =>{
       res.status(200).json(user)
@@ -58,13 +56,12 @@ router.post('/login', (req, res) =>
   if (isValid(req.body))
   {
     db('users').where({username:username}).orderBy('id').then(([user])=>{
-      console.log(user)
       if (user && bcryptjs.compareSync(password, user.password)){
         const token = createToken(user)
         // req.session.loggedIn = true
         // req.session.user = user
         // console.log("req.session", req.session.user) --- not working. abandon this method, ask TL or something. 
-        res.status(200).json(`Welcome to our API ${user.username}. Your token is ${token}.`)
+        res.status(200).json({message:`Welcome to our API ${user.username}. Your token is ${token}.`, token})
       }
       else{
         res.status(401).json({message: "invalid credentials. User==", user})
