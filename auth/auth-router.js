@@ -8,10 +8,25 @@ function isValid(user)
   return Boolean(user.username && typeof user.password === 'string')
 }
 
+async function add(user)
+{
+  try
+  {
+    const [id] = await db("auth").insert(user, "id");
+
+    return db("users").where({ id }).first();
+  } catch (error)
+  {
+    throw error;
+  }
+}
+
+
 router.post('/register', (req, res) =>
 {
   // implement registration
   const credentials = req.body
+  console.log(credentials)
 
   if (isValid(credentials))
   {
@@ -20,19 +35,17 @@ router.post('/register', (req, res) =>
     // turn password into hashbrowns
     const hash = bcryptjs.hashSync(credentials.password, rounds)
     credentials.password = hash
+    console.log(credentials)
     //save user to db
-    async function add(user)
-    {
-      try
-      {
-        const [id] = await db("auth").insert(user, "id");
-
-        return db("users").where({ id }).first();
-      } catch (error)
-      {
-        throw error;
-      }
-    }
+    add(credentials).then(user =>{
+      res.status(200).json(user)
+    })
+    .catch(e =>{
+      res.status(500).json(e)
+    })
+  }
+  else{
+    res.status(500).json("Please provide username and password")
   }
 })
   
