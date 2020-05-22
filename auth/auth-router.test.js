@@ -42,7 +42,6 @@ test("GET to /api/jokes to be successful", async ()=>{
   expect(login.body).toHaveProperty('token')
   expect(login.status).toBe(200)
   const res = await request(server).get('/api/jokes').set('authorization', login.body.token)
-  console.log("res body jokes'", res.body[0])
   expect(res.body[0]).toHaveProperty('id')
   expect(res.body[0]).toHaveProperty('joke')
 
