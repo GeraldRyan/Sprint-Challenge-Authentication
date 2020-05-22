@@ -2,6 +2,7 @@ const router = require('express').Router();
 const bcryptjs = require('bcryptjs')
 const jwt = require("jsonwebtoken")
 const configVars = require("../config/vars")
+const db = require('../database/dbConfig')
 
 function isValid(user)
 {
@@ -12,7 +13,7 @@ async function add(user)
 {
   try
   {
-    const [id] = await db("auth").insert(user, "id");
+    const [id] = await db("users").insert(user, "id");
 
     return db("users").where({ id }).first();
   } catch (error)
