@@ -60,9 +60,11 @@ router.post('/login', (req, res) =>
     db('users').where({username:username}).orderBy('id').then(([user])=>{
       console.log(user)
       if (user && bcryptjs.compareSync(password, user.password)){
-        console.log(bcryptjs.compareSync(password, user.password))
         const token = createToken(user)
-        res.status(200).json(`Welcome to our API ${user.username}. Your token is ${token}`)
+        // req.session.loggedIn = true
+        // req.session.user = user
+        // console.log("req.session", req.session.user) --- not working. abandon this method, ask TL or something. 
+        res.status(200).json(`Welcome to our API ${user.username}. Your token is ${token}.`)
       }
       else{
         res.status(401).json({message: "invalid credentials. User==", user})
